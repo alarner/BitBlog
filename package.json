@@ -1,0 +1,11 @@
+{
+  "name": "BtNetwork",
+  "description": "Uses BitTorrent Sync as a communication method for distributed web apps.",
+  "author": "Aaron <alarner@devjoist.com>",
+  "dependencies": {
+    "node-uuid": "~1.4.0",
+    "node-watch": "~0.3.3",
+    "websocket": "~1.0.8"
+  },
+  "engine": "node 0.10.5"
+}
