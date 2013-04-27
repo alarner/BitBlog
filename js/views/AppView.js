@@ -1,4 +1,7 @@
-define(['views/feed/FeedView'], function(FeedView) {
+define([
+	'views/feed/FeedView',
+	'collections/PostCollection'
+], function(FeedView, PostCollection) {
 	return Backbone.View.extend({
 		initialize: function(){
 			_.bindAll(
@@ -34,6 +37,15 @@ define(['views/feed/FeedView'], function(FeedView) {
 
 			this.feedView = new FeedView();
 			this.el.append(this.feedView.el);
+
+			var posts = new PostCollection([
+				{'id': 1, 'title': 'title1', 'body': 'body1', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 2, 'title': 'title2', 'body': 'body2', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 3, 'title': 'title3', 'body': 'body3', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 4, 'title': 'title4', 'body': 'body4', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+			]);
+
+			this.feedView.render(posts);
 		}
 	});
 });
