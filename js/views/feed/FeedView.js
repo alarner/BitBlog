@@ -1,19 +1,25 @@
 define([
 	'text!views/feed/feed.html',
+	'views/feed/post-form/PostFormView',
 	'views/feed/post/PostView'
-], function(html, PostView) {
+], function(html, PostFormView, PostView) {
 	return Backbone.View.extend({
 		initialize: function(){
 			_.bindAll(
 				this,
 				'render',
+				'onAddPost',
 				'onPostAdded',
 				'onPostRemoved'
 			);
 			this.el = $(_.template(html, {}));
 			this.$posts = this.el.find('#posts');
+			this.$postForm = this.el.find('#post-form');
 			this.posts = null;
 			this.postViews = {};
+			this.postFormView = new PostFormView();
+			this.$postForm.html(this.postFormView.el);
+			this.postFormView.bind('add_post', this.onAddPost);
 
 
 			// this.$submitButton = this.el.find('#post-submit');
@@ -41,6 +47,10 @@ define([
 				self.$posts.append(view.el);
 				self.postViews[postModel.id] = view;
 			});
+		},
+
+		onAddPost: function(data) {
+			this.posts.append(new PostModel(data.post));
 		},
 
 		onPostAdded: function(postModel) {
