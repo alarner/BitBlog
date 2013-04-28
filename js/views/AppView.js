@@ -12,7 +12,7 @@ define([
 			this.el = $('#app');
 
 			var posts = new PostCollection([
-				{'id': 1, 'title': 'title1', 'body': 'body1', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 1, 'title': 'Meet Some Hackers And Their Promising Projects At The Disrupt NY Hackathon', 'body': 'It’s only been about six hours since our Disrupt NY Hackathon officially began, and we’re starting to see our intrepid hackers hit their stride. Granted, some of them are a little farther along than others — Darrell found one guy who made an Arduino-powered robot for physically testing apps and devices — but there’s still plenty of time to bring some of these wild-eyed designs to fruition. Let’s… → Read More', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
 				{'id': 2, 'title': 'title2', 'body': 'body2', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
 				{'id': 3, 'title': 'title3', 'body': 'body3', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
 				{'id': 4, 'title': 'title4', 'body': 'body4', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
