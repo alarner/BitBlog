@@ -1,7 +1,8 @@
 define([
 	'views/feed/FeedView',
-	'collections/PostCollection'
-], function(FeedView, PostCollection) {
+	'collections/PostCollection',
+	'models/PostModel'
+], function(FeedView, PostCollection, PostModel) {
 	return Backbone.View.extend({
 		initialize: function(){
 			_.bindAll(
@@ -32,6 +33,8 @@ define([
 				}
 
 				window.socket.onmessage = function(message) {
+					console.log('onmessage');
+					console.log(message.data);
 					var postObj = JSON.parse(message.data);
 					var postModel = null;
 					if(postObj.cid) {
@@ -41,8 +44,14 @@ define([
 					else {
 						postModel = posts.get(postObj.id);
 					}
-					postModel.set(postObj);
-					posts.sort();
+
+					if(postModel) {
+						postModel.set(postObj);
+						posts.sort();
+					}
+					else {
+						posts.add(new PostModel(postObj));
+					}					
 				}
 
 				window.socket.onclose = function() {

@@ -82,7 +82,7 @@ wsServer.on('request', function(request) {
 
 	watch('/Users/alarner/Documents/node/BtNetwork/read_only', function(filename) {
 		fs.readFile(filename, 'utf8', function(err, data) {
-			if (err) {
+			if(err) {
 				return console.log(err);
 			}
 			else {
