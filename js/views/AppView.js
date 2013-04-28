@@ -33,20 +33,16 @@ define([
 
 				window.socket.onmessage = function(message) {
 					var postObj = JSON.parse(message.data);
-					console.log(postObj);
 					var postModel = null;
 					if(postObj.cid) {
-						console.log('test1');
-						console.log(posts);
-						postModel = posts.getByCid(postObj.cid);
+						postModel = posts.get(postObj.cid);
 						delete postObj.cid
 					}
 					else {
-						console.log('test2');
 						postModel = posts.get(postObj.id);
 					}
 					postModel.set(postObj);
-					console.log(posts);
+					posts.sort();
 				}
 
 				window.socket.onclose = function() {
@@ -70,7 +66,6 @@ define([
 			if(!postObj.id) {
 				postObj.cid = postModel.cid;
 			}
-			console.log(JSON.stringify(postObj));
 			window.socket.send(JSON.stringify(postObj));
 		}
 	});

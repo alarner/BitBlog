@@ -54,12 +54,12 @@ wsServer.on('request', function(request) {
 				delete postObj.cid;
 			}
 			postObj.created_date = 
-				d.getUTCFullYear()+'-'+
-				(d.getUTCMonth()+1)+'-'+
-				d.getUTCDate()+' '+
-				d.getUTCHours()+':'+
-				d.getUTCMinutes()+':'+
-				d.getUTCSeconds();
+				pad(d.getUTCFullYear(), 4)+'-'+
+				pad((d.getUTCMonth()+1), 2)+'-'+
+				pad(d.getUTCDate(), 2)+' '+
+				pad(d.getUTCHours(), 2)+':'+
+				pad(d.getUTCMinutes(), 2)+':'+
+				pad(d.getUTCSeconds(), 2);
 			fs.writeFile(settings.my_dir+postObj.id, JSON.stringify(postObj), function(err) {
 				if(err) {
 					console.log(err);
@@ -94,3 +94,11 @@ wsServer.on('request', function(request) {
 		console.log(filename, ' changed.');
 	});
 });
+
+function pad(number, length) {
+	var str = '' + number;
+	while (str.length < length) {
+		str = '0' + str;
+	}
+	return str;
+}
