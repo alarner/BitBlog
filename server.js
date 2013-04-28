@@ -53,20 +53,29 @@ wsServer.on('request', function(request) {
 			var cid = null;
 			if(!postObj.id) {
 				postObj.id = uuid.v4();
+				postObj.user_id = settings.my_read_only;
 				cid = postObj.cid;
 				delete postObj.cid;
+				postObj.created_date = 
+					pad(d.getUTCFullYear(), 4)+'-'+
+					pad((d.getUTCMonth()+1), 2)+'-'+
+					pad(d.getUTCDate(), 2)+' '+
+					pad(d.getUTCHours(), 2)+':'+
+					pad(d.getUTCMinutes(), 2)+':'+
+					pad(d.getUTCSeconds(), 2);
 			}
-			postObj.created_date = 
-				pad(d.getUTCFullYear(), 4)+'-'+
-				pad((d.getUTCMonth()+1), 2)+'-'+
-				pad(d.getUTCDate(), 2)+' '+
-				pad(d.getUTCHours(), 2)+':'+
-				pad(d.getUTCMinutes(), 2)+':'+
-				pad(d.getUTCSeconds(), 2);
-			fs.writeFile(settings.my_dir+postObj.id, JSON.stringify(postObj), function(err) {
+			var filepath = '';
+			if(postObj.user_id == settings.my_read_only) {
+				filepath += settings.my_dir;
+			}
+			else {
+				filepath += settings.base_follow_dir;
+			}
+			filepath += postObj.id;
+			fs.writeFile(filepath, JSON.stringify(postObj), function(err) {
 				if(err) {
 					console.log(err);
-				} else {
+				} else if(postObj.user_id == settings.my_read_only) {
 					console.log("The file was saved!");
 					if(cid) postObj.cid = cid;
 					connection.sendUTF(JSON.stringify(postObj));
