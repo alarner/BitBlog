@@ -2,8 +2,7 @@
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
-  background-color: #f5f5f5;
-  background-image: url("../img/post-bg.png");
+  background-color: #FFFFFF;
   border: 1px solid #e3e3e3;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -16,4 +15,7 @@
     font-style: italic;
 	font-size: 38.5px;
     line-height: 40px;
+}
+body {
+	background-image: url("../img/post-bg.png");
 }
