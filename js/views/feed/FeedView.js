@@ -21,14 +21,6 @@ define([
 			this.postFormView = new PostFormView();
 			this.$postForm.html(this.postFormView.el);
 			this.postFormView.bind('add_post', this.onAddPost);
-
-
-			// this.$submitButton = this.el.find('#post-submit');
-			// this.$title = this.el.find('#post-title');
-			// this.$body = this.el.find('#post-body');
-
-
-			// this.$submitButton.click(this.onClick);
 		},
 
 		render: function(posts) {
@@ -56,7 +48,9 @@ define([
 
 		onPostAdded: function(postModel) {
 			var view = new PostView({'model': postModel});
+			view.el.hide();
 			this.$posts.prepend(view.el);
+			view.el.slideDown();
 			this.postViews[postModel.id] = view;
 		},
 

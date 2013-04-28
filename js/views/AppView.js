@@ -75,7 +75,11 @@ define([
 			if(!postObj.id) {
 				postObj.cid = postModel.cid;
 			}
-			window.socket.send(JSON.stringify(postObj));
+			var message = {
+				'type': 'post',
+				'post': postObj
+			}
+			window.socket.send(JSON.stringify(message));
 		}
 	});
 });

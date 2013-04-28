@@ -10,7 +10,6 @@ define(['text!views/feed/post-form/post-form.html'], function(html) {
 			this.$title = this.el.find('#post-title');
 			this.$body = this.el.find('#post-body');
 
-
 			this.$submitButton.click(this.onClick);
 		},
 
@@ -22,6 +21,8 @@ define(['text!views/feed/post-form/post-form.html'], function(html) {
 
 			this.$title.val('');
 			this.$body.val('');
+			this.$image.replaceWith(this.$image = this.$image.val('').clone(true));
+			this.image = null;
 		}
 	});
 });
