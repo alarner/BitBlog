@@ -21,7 +21,6 @@ define(['text!views/feed/post-form/post-form.html'], function(html) {
 
 			this.$title.val('');
 			this.$body.val('');
-			this.$image.replaceWith(this.$image = this.$image.val('').clone(true));
 			this.image = null;
 		}
 	});
