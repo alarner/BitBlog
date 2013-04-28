@@ -80,7 +80,7 @@ wsServer.on('request', function(request) {
 	// 	console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 	// });
 
-	watch('/Users/alarner/Documents/node/BtNetwork/read_only', function(filename) {
+	function onFileChanged(filename) {
 		fs.readFile(filename, 'utf8', function(err, data) {
 			if(err) {
 				return console.log(err);
@@ -92,7 +92,13 @@ wsServer.on('request', function(request) {
 		});
 		
 		console.log(filename, ' changed.');
-	});
+	}
+
+	for(var i in settings.follow_dirs) {
+		if(settings.follow_dirs.hasOwnProperty(i)) {
+			watch(settings.base_follow_dir+i, onFileChanged);
+		}
+	}
 });
 
 function pad(number, length) {
