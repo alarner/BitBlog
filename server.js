@@ -4,7 +4,10 @@ var http = require('http');
 var watch = require('node-watch');
 var fs = require('fs');
 var uuid = require('node-uuid');
-var settings = require('./settings')
+var path = require('path');
+var settings = require('./settings');
+settings.my_dir = path.normalize(settings.my_dir);
+settings.base_follow_dir = path.normalize(settings.base_follow_dir);
 
 var writeableDir = '/Users/alarner/Documents/node/BtNetwork/3SNMAXPJDF7GEIHZVLY2L6TFNTVNZQEG/';
 
@@ -81,17 +84,27 @@ wsServer.on('request', function(request) {
 	// });
 
 	function onFileChanged(filename) {
-		fs.readFile(filename, 'utf8', function(err, data) {
-			if(err) {
-				return console.log(err);
+		var filepath = path.normalize(filename);
+		var pieces = filepath.split(path.sep);
+		var hidden = false;
+		for(var i=0; i<pieces.length; i++) {
+			if(pieces[i].substring(0,1) == '.') {
+				hidden = true;
 			}
-			else {
-				console.log(data);
-				connection.sendUTF(data);
-			}
-		});
-		
-		console.log(filename, ' changed.');
+		}
+		if(!hidden) {
+			fs.readFile(filename, 'utf8', function(err, data) {
+				if(err) {
+					return console.log(err);
+				}
+				else {
+					console.log(data);
+					connection.sendUTF(data);
+				}
+			});
+			
+			console.log(filename, ' changed.');
+		}
 	}
 
 	for(var i in settings.follow_dirs) {

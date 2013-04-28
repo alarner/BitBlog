@@ -5,7 +5,8 @@
   "dependencies": {
     "node-uuid": "~1.4.0",
     "node-watch": "~0.3.3",
-    "websocket": "~1.0.8"
+    "websocket": "~1.0.8",
+    "path": "~0.4.9"
   },
   "engine": "node 0.10.5"
 }
