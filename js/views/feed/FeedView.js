@@ -1,8 +1,9 @@
 define([
 	'text!views/feed/feed.html',
 	'views/feed/post-form/PostFormView',
-	'views/feed/post/PostView'
-], function(html, PostFormView, PostView) {
+	'views/feed/post/PostView',
+	'models/PostModel'
+], function(html, PostFormView, PostView, PostModel) {
 	return Backbone.View.extend({
 		initialize: function(){
 			_.bindAll(
@@ -49,8 +50,8 @@ define([
 			});
 		},
 
-		onAddPost: function(data) {
-			this.posts.append(new PostModel(data.post));
+		onAddPost: function(postData) {
+			this.posts.add(new PostModel(postData));
 		},
 
 		onPostAdded: function(postModel) {

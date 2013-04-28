@@ -4,6 +4,7 @@ var http = require('http');
 var watch = require('node-watch');
 var fs = require('fs');
 var uuid = require('node-uuid');
+var settings = require('./settings')
 
 var writeableDir = '/Users/alarner/Documents/node/BtNetwork/3SNMAXPJDF7GEIHZVLY2L6TFNTVNZQEG/';
 
@@ -44,11 +45,28 @@ wsServer.on('request', function(request) {
 	// connection.sendUTF('test');
 	connection.on('message', function(message) {
 		if(message.type === 'utf8') {
-			fs.writeFile(writeableDir+uuid.v4(), message.utf8Data, function(err) {
+			var d = new Date();
+			var postObj = JSON.parse(message.utf8Data);
+			var cid = null;
+			if(!postObj.id) {
+				postObj.id = uuid.v4();
+				cid = postObj.cid;
+				delete postObj.cid;
+			}
+			postObj.created_date = 
+				d.getUTCFullYear()+'-'+
+				(d.getUTCMonth()+1)+'-'+
+				d.getUTCDate()+' '+
+				d.getUTCHours()+':'+
+				d.getUTCMinutes()+':'+
+				d.getUTCSeconds();
+			fs.writeFile(settings.my_dir+postObj.id, JSON.stringify(postObj), function(err) {
 				if(err) {
 					console.log(err);
 				} else {
 					console.log("The file was saved!");
+					if(cid) postObj.cid = cid;
+					connection.sendUTF(JSON.stringify(postObj));
 				}
 			});
 			// connection.sendUTF(message.utf8Data);
@@ -62,7 +80,7 @@ wsServer.on('request', function(request) {
 	// 	console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 	// });
 
-	watch('/Users/alarner/Documents/node/BtNetwork/read_only/RGIS4MRSRGUR2ALC5ZFJML6KN55DD26ML', function(filename) {
+	watch('/Users/alarner/Documents/node/BtNetwork/read_only', function(filename) {
 		fs.readFile(filename, 'utf8', function(err, data) {
 			if (err) {
 				return console.log(err);

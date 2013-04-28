@@ -15,11 +15,13 @@ define(['text!views/feed/post-form/post-form.html'], function(html) {
 		},
 
 		onClick: function(e) {
-			message = {
+			this.trigger('add_post', {
 				'title': this.$title.val(),
 				'body': this.$body.val()
-			};
-			window.socket.send(JSON.stringify(message));
+			});
+
+			this.$title.val('');
+			this.$body.val('');
 		}
 	});
 });

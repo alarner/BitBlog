@@ -5,9 +5,19 @@ define([
 	return Backbone.View.extend({
 		initialize: function(){
 			_.bindAll(
-				this
+				this,
+				'onPostAdded'
 			);
 			this.el = $('#app');
+
+			var posts = new PostCollection([
+				{'id': 1, 'title': 'title1', 'body': 'body1', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 2, 'title': 'title2', 'body': 'body2', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 3, 'title': 'title3', 'body': 'body3', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+				{'id': 4, 'title': 'title4', 'body': 'body4', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
+			]);
+
+			posts.bind('add', this.onPostAdded);
 
 			// Connect to the "server"
 			try {
@@ -21,8 +31,22 @@ define([
 					 // message('<p class="event">Socket Status: '+socket.readyState+' (open)');
 				}
 
-				window.socket.onmessage = function(msg) {
-					console.log(msg.data);
+				window.socket.onmessage = function(message) {
+					var postObj = JSON.parse(message.data);
+					console.log(postObj);
+					var postModel = null;
+					if(postObj.cid) {
+						console.log('test1');
+						console.log(posts);
+						postModel = posts.getByCid(postObj.cid);
+						delete postObj.cid
+					}
+					else {
+						console.log('test2');
+						postModel = posts.get(postObj.id);
+					}
+					postModel.set(postObj);
+					console.log(posts);
 				}
 
 				window.socket.onclose = function() {
@@ -38,14 +62,16 @@ define([
 			this.feedView = new FeedView();
 			this.el.append(this.feedView.el);
 
-			var posts = new PostCollection([
-				{'id': 1, 'title': 'title1', 'body': 'body1', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
-				{'id': 2, 'title': 'title2', 'body': 'body2', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
-				{'id': 3, 'title': 'title3', 'body': 'body3', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
-				{'id': 4, 'title': 'title4', 'body': 'body4', 'created_date': '2013-04-27 18:42:00', 'updated_date': null},
-			]);
-
 			this.feedView.render(posts);
+		},
+
+		onPostAdded: function(postModel) {
+			var postObj = postModel.toJSON();
+			if(!postObj.id) {
+				postObj.cid = postModel.cid;
+			}
+			console.log(JSON.stringify(postObj));
+			window.socket.send(JSON.stringify(postObj));
 		}
 	});
 });
